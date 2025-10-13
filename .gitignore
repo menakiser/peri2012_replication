@@ -6,11 +6,6 @@ data/*
 *.csv
 *.xlsx
 
-# output
-*output/
-*output/*
-output/*
-
 # From R
 *.RData
 *.Rhistory

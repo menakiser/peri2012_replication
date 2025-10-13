@@ -50,6 +50,8 @@ gen d_hours_perworker=(hours_perworker-hours_perworker[_n-1])/hours_perworker[_n
 gen d_empl=(empl-empl[_n-1])/empl[_n-1] if year>1960
 gen d_empl_lag=d_empl[_n-1] if year>1970
 gen d_hours_perworker_lag=d_hours_perworker[_n-1] if year>1970
+gen d_h=(h-h[_n-1])/h  if year>1960
+//or gen d_h=ln(h)-ln(h[_n-1]) if year>1960
 gen d_h_lag=d_h[_n-1] if year>1970
 
 **explanatory variable
@@ -91,8 +93,7 @@ gen d_A_lag=d_A[_n-1] if year>1970
 gen d_beta_lag=d_beta[_n-1] if year>1970
 gen d_phi_lag=d_phi[_n-1] if year>1970
 gen d_gsp_worker= ln(gsp_worker)-ln(gsp_worker[_n-1]) if year>1960
-gen d_h=(h-h[_n-1])/h  if year>1960
-//or gen d_h=ln(h)-ln(h[_n-1]) if year>1960
+
 gen lnempl=ln(empl)
 
 **** growth rates
@@ -174,4 +175,4 @@ sort year
 by year: sum d_A d_beta d_phi d_h d_immi_empl
 
 
-save "$wd/gsp_empl.csv"
+save "$wd/data/gsp_empl_replication", replace

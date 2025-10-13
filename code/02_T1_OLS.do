@@ -133,8 +133,8 @@ program main
 	file write sumstat "\toprule" _n
 	file write sumstat "\toprule" _n
     file write sumstat "& (1) & (2) & (3) & (4) & (5) \\" _n
-    file write sumstat " & &  & Including & 2SLS Estimates \\" _n
-    file write sumstat " & &  & Lagged & Population \\" _n
+    file write sumstat " & & & & Including & 2SLS Estimates \\" _n
+    file write sumstat " & & & & Lagged & Population \\" _n
 	file write sumstat "Dependent & Basic & 1970-- & 1960-- & Dependent & Change as \\" _n
 	file write sumstat "Variable & OLS & 2006 & 2000 & Variable & Instrument \\" _n
 	file write sumstat "\midrule " _n

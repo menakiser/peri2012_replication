@@ -1,7 +1,7 @@
 /* Create for OLS table 1 creation from Peri (2012)
 */
 
-clear
+clear all
 clear matrix
 set mem 100m
 set matsize 110
@@ -161,7 +161,7 @@ program main
     }
     file write sumstat "Observations "
     forval i = 1/5 {
-        local obs = string(c`i'[1,4], "%6.1fc")
+        local obs = string(c`i'[1,4], "%6.0f")
         file write sumstat " & `obs' "
     }
     file write sumstat " \\" _n

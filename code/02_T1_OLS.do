@@ -125,25 +125,26 @@ program main
     *Create Overleaf table
     ************************************************
 
-    global depvarnames `" "\hat{N}" "\hat{y}" "Components of \hat{y}" "\hat{A}" "\hat{x}" "\hat{\Phi}" "\hat{h}" "\hat{\beta}" "'
+    global depvarnames `" "\hat{N}" "\hat{y}" "Components of \hat{y}" "\hat{A}" "\hat{x}" "\hat{\phi}" "\hat{h}" "\hat{\beta}" "'
 
     cap file close sumstat
 	file open sumstat using "$wd/output/t1_ols.tex", write replace
 	file write sumstat "\begin{tabular}{lccccc}" _n
 	file write sumstat "\toprule" _n
 	file write sumstat "\toprule" _n
-    file write sumstat "(1) & (2) & (3) & (4) & (5) \\" _n
+    file write sumstat "& (1) & (2) & (3) & (4) & (5) \\" _n
     file write sumstat " & &  & Including & 2SLS Estimates \\" _n
     file write sumstat " & &  & Lagged & Population \\" _n
 	file write sumstat "Dependent & Basic & 1970-- & 1960-- & Dependent & Change as \\" _n
 	file write sumstat "Variable & OLS & 2006 & 2000 & Variable & Instrument \\" _n
-	file write sumstat " & b & R2 & b & R2 & Variable Mean \\" _n
 	file write sumstat "\midrule " _n
 
     forval i = 1/8 {
         di "Writing row `i'"
         local lab: word `i' of $depvarnames
-
+        if "`lab' " =="\hat{\phi}" {
+            file write sumstat "Components of \hat{\phi} & & & & & \\" _n  
+        }
         file write sumstat "`lab' " 
         forval j = 1/5{
            di "Writing coefficients in column `j'"

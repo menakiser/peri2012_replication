@@ -1,0 +1,43 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+% Document dependencies
+\usepackage[utf8]{inputenc}
+\usepackage[round]{natbib}
+\usepackage{graphicx, adjustbox, rotating}
+\usepackage{booktabs, url}
+\usepackage{comment}
+\usepackage{float}
+\usepackage{pdflscape}
+
+\usepackage{caption, subcaption}
+\usepackage[margin=1in]{geometry} %margins
+\usepackage[colorlinks = true, urlcolor = blue, linkcolor = blue, citecolor = blue]{hyperref}
+\usepackage[parfill]{parskip} % first line skip 
+\setlength{\parindent}{15pt} %for paragraph indent
+\usepackage{indentfirst} %for first paragraph indent
+\usepackage{setspace} %line spacing
+ \usepackage{pdfpages}
+ \usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\pdfgentounicode=1
+
+\title{Replication of Peri (2012)}
+\author{Mena Kiser}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Replication using provided data}
+
+\begin{table}[h]
+\centering
+\caption{Results for Classroom-level Summary}
+\adjustbox{ width=\linewidth}{
+    \input{output/t1_ols}
+}
+\end{table}
+
+
+\end{document}

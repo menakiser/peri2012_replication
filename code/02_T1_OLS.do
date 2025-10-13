@@ -142,7 +142,7 @@ program main
     forval i = 1/8 {
         di "Writing row `i'"
         local lab: word `i' of $depvarnames
-        if "`lab' " =="\hat{\phi}" {
+        if `i'==6 {
             file write sumstat "Components of \hat{\phi} & & & & & \\" _n  
         }
         file write sumstat "`lab' " 

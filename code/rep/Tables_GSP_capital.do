@@ -1,19 +1,21 @@
+
+
+
 clear
 clear matrix
 set mem 100m
 set matsize 110
-global wd "/Users/jimenakiser/liegroup Dropbox/Jimena Villanueva Kiser/peri2012_replication/"
-global rd "/Users/jimenakiser/liegroup Dropbox/raw_backup/immigration_productivity/2025_10_10/data/"
+cd Z:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\empirics
 
 /* data with employment hours, immigrants and imputed immigrants */
 
-insheet using "$rd/cap_gsp_60_08.csv"
+insheet using "Z:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\revision_gsp_capital_data\cap_gsp_60_08.csv"
 drop if fips==0
 gen statefip=fips
 drop state fips
 keep if year== 1960 | year==1970 |year==1980 | year==1990 | year==2000 |year==2006
 sort year statefip
-merge 1:1 year statefip using "$rd/empl_wages_iv_state_60_06.dta"
+merge 1:1 year statefip using "Z:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\empirics\empl_wages_iv_state_60_06.dta"
 drop _merge
 sort statefip year
 
@@ -138,19 +140,65 @@ replace la_dist_06=ln(la_dist) if year==2006
 sort year
 by year: sum d_gsp_worker d_k_y_ratio 
 
-** Table 1 row 2, GSP per worker and immigrants (y hat)
-xi: reg d_gsp_worker d_immi_empl i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip) //c1
-xi: reg d_gsp_worker d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c2
-xi: reg d_gsp_worker d_immi_empl i.year  i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip) //c3
-xi: reg d_gsp_worker d_gsp_worker_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c4
-xi: ivreg d_gsp_worker (d_immi_empl=d_immi_pop) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip) //c5
+** Table 1 row 2, GSP per worker and immigrants
+xi: reg d_gsp_worker d_immi_empl i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+xi: reg d_gsp_worker d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: reg d_gsp_worker d_immi_empl i.year  i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip)
+xi: reg d_gsp_worker d_gsp_worker_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: ivreg d_gsp_worker (d_immi_empl=d_immi_pop) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
 
 
-***Table 1, row 3, (components of y hat)
-xi: reg d_k_y_ratio_corrected d_immi_empl i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip) //c1
-xi: reg d_k_y_ratio_corrected d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c2
-xi: reg d_k_y_ratio_corrected d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip) //c3
-xi: reg d_k_y_ratio_corrected d_k_y_ratio_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c4
-xi: ivreg d_k_y_ratio_corrected (d_immi_empl=d_immi_pop) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip) //c5
+***Table 1, row 3
+xi: reg d_k_y_ratio_corrected d_immi_empl i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+xi: reg d_k_y_ratio_corrected d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: reg d_k_y_ratio_corrected d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip)
+xi: reg d_k_y_ratio_corrected d_k_y_ratio_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: ivreg d_k_y_ratio_corrected (d_immi_empl=d_immi_pop) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+
+
+/***
+*** Effect on capital stock capital stock, larger than one for one (suppressed in the last version).
+xi: reg d_kap d_immi_empl i.year lnkap [aw=empl] if year>1960, robust cluster(statefip)
+xi: reg d_kap d_immi_empl i.year [aw=empl] if year>1970, robust cluster(statefip)
+xi: reg d_kap d_immi_empl i.year [aw=empl] if year<2006, robust cluster(statefip)
+xi: reg d_kap d_immi_empl d_kap_lag i.year [aw=empl] if year<2006, robust cluster(statefip)
+****/
+
+
+** 2sls with border and imputed immi as IV
+*** Table 2, row 2 GSP per worker
+xi: ivreg d_gsp_worker (d_immi_empl= d_immi_imputed bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+xi: ivreg d_gsp_worker (d_immi_empl= d_immi_imputed bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: ivreg d_gsp_worker (d_immi_empl=d_immi_imputed bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip)
+xi: ivreg d_gsp_worker (d_immi_empl=d_immi_imputed bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) d_gsp_worker_lag i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+xi: ivreg d_gsp_worker (d_immi_empl= bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+
+
+**Table 2, row 3
+xi: ivreg d_k_y_ratio_corrected (d_immi_empl= d_immi_imputed ny_dist_70 ny_dist_80 ny_dist_90 ny_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+xi: ivreg d_k_y_ratio_corrected (d_immi_empl= d_immi_imputed ny_dist_70 ny_dist_80 ny_dist_90 ny_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: ivreg d_k_y_ratio_corrected (d_immi_empl= d_immi_imputed ny_dist_70 ny_dist_80 ny_dist_90 ny_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip)
+xi: ivreg d_k_y_ratio_corrected (d_immi_empl= d_immi_imputed ny_dist_70 ny_dist_80 ny_dist_90 ny_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) d_k_y_ratio_lag i.year i.statefip if year>1970 [aw=empl] , robust cluster(statefip)
+xi: ivreg d_k_y_ratio_corrected (d_immi_empl= bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+
+
+*** figures
+sort statefip year
+
+egen lngsp_worker_ave=mean(lngsp_worker), by (year)
+egen lnkap_worker_ave=mean(lnkap_worker), by (year)
+
+
+
+
+*** figures on gdp and capital
+twoway connect lngsp_worker lngsp_worker_ave year , mlabel(state_code)
+twoway connect lnkap_worker lnkap_worker_ave year if statefip~=10, mlabel(state_code)
+
+
+
+
+
+
 
 

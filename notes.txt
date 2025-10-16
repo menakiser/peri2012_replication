@@ -1,0 +1,23 @@
+Data souces
+
+2024 list of ACS codes: provides a crosswalk from 2018 Census Code to 2018 SOC code.
+Census Code
+https://www.census.gov/programs-surveys/acs/technical-documentation/code-lists.html
+
+
+
+BLS STEM OCCUPATIONS LIST
+using occupation list from STEM data, May 2024 (XLSX)
+https://www.bls.gov/oes/additional.htm
+
+
+DHS STEM major lists
+on CIP codes
+https://www.ice.gov/sites/default/files/documents/stem-list.pdf
+
+DEGFIELD to CIP codes
+Crosswalk between ACS college major (DEGFIELDD)
+https://forum.ipums.org/t/crosswalk-between-degfieldd-and-cip/4209
+
+
+do i need cip codes crosswalks across years?

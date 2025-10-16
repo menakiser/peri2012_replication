@@ -1,20 +1,21 @@
 
+
+
 clear
 clear matrix
 set mem 100m
 set matsize 110
-global wd "/Users/jimenakiser/liegroup Dropbox/Jimena Villanueva Kiser/peri2012_replication/"
-global rd "/Users/jimenakiser/liegroup Dropbox/raw_backup/immigration_productivity/2025_10_10/data/"
+cd H:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\empirics
 
 /* data with employment hours, immigrants and imputed immigrants */
 
-insheet using "$rd/cap_gsp_60_08.csv"
+insheet using "H:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\revision_gsp_capital_data\cap_gsp_60_08.csv"
 drop if fips==0
 gen statefip=fips
 drop state fips
 keep if year== 1960 | year==1970 |year==1980 | year==1990 | year==2000 |year==2006
 sort year statefip
-merge 1:1 year statefip using "$rd/empl_wages_iv_state_60_06.dta"
+merge 1:1 year statefip using "H:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\empirics\empl_wages_iv_state_60_06.dta"
 drop _merge
 sort statefip year
 
@@ -116,7 +117,7 @@ imigrants contribute to employment growth and do not crowd out natives **/
 sort year
 by year: sum d_empl d_hours_perworker d_immi_empl
 
-*** table 1, row 1, OLS effect of immigration on total employment (N hat)
+*** table 1, row 1, OLS effect of immigration on total employment
 xi: reg d_empl d_immi_empl i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
 xi: reg d_empl d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
 xi: reg d_empl d_immi_empl i.year i.statefip[aw=empl] if year>1960 & year<2006, robust cluster(statefip)
@@ -131,7 +132,7 @@ xi: reg d_us_empl d_empl_lag d_immi_empl i.year [aw=empl] if year>1970, robust c
 xi: ivreg d_us_empl (d_immi_empl=d_immi_pop) i.year [aw=empl] if year>1960, robust cluster(statefip)
 **(ok!!)*****
 
-*** table 1 row 5, effects on hours per worker (x hat)
+*** table 1 row 5, effects on hours per worker
 xi: reg d_hours_perworker d_immi_empl i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
 xi: reg d_hours_perworker d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
 xi: reg d_hours_perworker d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip)

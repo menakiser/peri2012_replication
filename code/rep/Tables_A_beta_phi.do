@@ -1,28 +1,20 @@
 
+
 clear
 clear matrix
 set mem 100m
 set matsize 110
-
-
-/* check datasets
-cap_gsp_60_08.csv 
-empl_wages_iv_state_60_06.dta 
-imputed_growth.dta
-panel_state_data.dta*/
-global wd "/Users/jimenakiser/liegroup Dropbox/Jimena Villanueva Kiser/peri2012_replication/"
-global rd "/Users/jimenakiser/liegroup Dropbox/raw_backup/immigration_productivity/2025_10_10/data/"
-
-
+cd H:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\empirics
 
 /* data with employment hours, immigrants and imputed immigrants */
-insheet using "$rd/cap_gsp_60_08.csv"
+
+insheet using "H:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\revision_gsp_capital_data\cap_gsp_60_08.csv"
 drop if fips==0
 gen statefip=fips
 drop state fips
 keep if year== 1960 | year==1970 |year==1980 | year==1990 | year==2000 |year==2006
 sort year statefip
-merge 1:1 year statefip using "$rd/empl_wages_iv_state_60_06.dta"
+merge 1:1 year statefip using "H:\Giovanni\MyPapers\Peri_Accounting\second_Revision_spring_10\empirics\empl_wages_iv_state_60_06.dta"
 drop _merge
 sort statefip year
 
@@ -135,29 +127,29 @@ by year: sum d_A d_beta d_phi d_h d_immi_empl
 
 *** OLS ***
 ** Table 1 row 4, effect on A
-xi: reg d_A d_immi_empl i.year i.statefip  [aw=empl] if year>1960, robust cluster(statefip) //c1
-xi: reg d_A d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c2
-xi: reg d_A d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip) //c3
-xi: reg d_A d_A_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c4
-xi: ivreg d_A (d_immi_empl=d_immi_pop) i.statefip [aw=empl] if year>1960, robust cluster(statefip) //c5
+xi: reg d_A d_immi_empl i.year i.statefip  [aw=empl] if year>1960, robust cluster(statefip)
+xi: reg d_A d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: reg d_A d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip)
+xi: reg d_A d_A_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: ivreg d_A (d_immi_empl=d_immi_pop) i.statefip [aw=empl] if year>1960, robust cluster(statefip)
 
 
 xi: reg d_A d_immi_empl lnA i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
 
 
 ** Table 1 row 6, effect on beta
-xi: reg d_beta d_immi_empl i.year i.statefip[aw=empl] if year>1960, robust cluster(statefip) //c1
-xi: reg d_beta d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c2
-xi: reg d_beta d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip) //c3
-xi: reg d_beta d_beta_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c4
-xi: ivreg d_beta (d_immi_empl=d_immi_pop) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip) //c5
+xi: reg d_beta d_immi_empl i.year i.statefip[aw=empl] if year>1960, robust cluster(statefip)
+xi: reg d_beta d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: reg d_beta d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip)
+xi: reg d_beta d_beta_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: ivreg d_beta (d_immi_empl=d_immi_pop) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
 
-** Table 1 row 5, effect on phi
-xi: reg d_phi d_immi_empl i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip) //c1
-xi: reg d_phi d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c2
-xi: reg d_phi d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip) //c3
-xi: reg d_phi d_phi_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip) //c4
-xi: ivreg d_phi (d_immi_empl=d_immi_pop) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip) //c5
+** Table 1 row 8, effect on phi
+xi: reg d_phi d_immi_empl i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
+xi: reg d_phi d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: reg d_phi d_immi_empl i.year i.statefip [aw=empl] if year>1960 & year<2006, robust cluster(statefip)
+xi: reg d_phi d_phi_lag d_immi_empl i.year i.statefip [aw=empl] if year>1970, robust cluster(statefip)
+xi: ivreg d_phi (d_immi_empl=d_immi_pop) i.year i.statefip [aw=empl] if year>1960, robust cluster(statefip)
 
 
 
@@ -237,7 +229,6 @@ xi: ivreg d_beta (d_immi_empl= d_immi_imputed bord_dist_70 bord_dist_80 bord_dis
 xi: ivreg d_beta (d_immi_empl= d_immi_imputed bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 ny_dist_70 ny_dist_80 ny_dist_90 ny_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year [aw=empl] if year>1960 & statefip~=48 & statefip~=6 & statefip~=36 , robust cluster(statefip)
 xi: ivreg d_beta (d_immi_empl= d_immi_imputed bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 ny_dist_70 ny_dist_80 ny_dist_90 ny_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year [aw=empl] if year>1980 , robust cluster(statefip)
 xi: ivreg d_beta (d_immi_empl= d_immi_imputed bord_dist_70 bord_dist_80 bord_dist_90 bord_dist_00 ny_dist_70 ny_dist_80 ny_dist_90 ny_dist_00 la_dist_70 la_dist_80 la_dist_90 la_dist_00) i.year [aw=empl] if year>1960 & statefip~=6 & statefip~=12 , robust cluster(statefip)
-
 
 
 
